@@ -187,7 +187,7 @@ export class DialPad extends React.Component {
       <div className={classes.numpadRowContainer} key={rowIndex}>
         {rowItem.map((item, itemIndex) => {
           return (
-            <div className={classes.numberButtonContainer}>
+            <div key={"num" + itemIndex} className={classes.numberButtonContainer}>
               {item.value !== "0"
                 ? this.standardNumberButton(item)
                 : this.clickNHoldButton(item)}

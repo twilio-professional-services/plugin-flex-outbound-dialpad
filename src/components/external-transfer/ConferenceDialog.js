@@ -114,7 +114,7 @@ class ConferenceDialog extends React.Component {
 const mapStateToProps = state => {
   const componentViewStates = state.flex.view.componentViewStates;
   const conferenceDialogState = componentViewStates && componentViewStates.ConferenceDialog;
-  const isOpen = conferenceDialogState && conferenceDialogState.isOpen;
+  const isOpen = (conferenceDialogState && conferenceDialogState.isOpen) || false;
   return {
     isOpen,
     phoneNumber: state.flex.worker.attributes.phone

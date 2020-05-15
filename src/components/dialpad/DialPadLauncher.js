@@ -85,7 +85,6 @@ class DialPadDialog extends React.Component {
 
   setAgentAvailable() {
     return new Promise((resolve, reject) => {
-
       Actions.invokeAction("SetActivity", {
         activityName: "Available"
       })
@@ -177,8 +176,6 @@ class DialPadDialog extends React.Component {
   };
 
   render() {
-    const { classes, onClose, ...other } = this.props;
-
     return (
       <StyledDialog
         disableBackdropClick
@@ -186,7 +183,7 @@ class DialPadDialog extends React.Component {
         onClose={this.handleClose}
         aria-labelledby="simple-dialog-title"
         maxWidth={"xs"}
-        {...other}
+        open={this.props.isOpen}
       >
         <CloseButton>
           {""}
@@ -217,8 +214,6 @@ DialPadDialog.propTypes = {
   openDialpad: PropTypes.func.isRequired,
   closeDialpad: PropTypes.func.isRequired,
 };
-
-
 
 const CloseButton = styled("div")`
   cursor: pointer;
@@ -255,7 +250,7 @@ export default class DialPadLauncher extends React.Component {
           Dialpad
         </IconButton>
         <DialPadDialog
-          open={this.state.isOpen}
+          isOpen={this.state.isOpen}
           openDialpad={this.openDialpad}
           closeDialpad={this.closeDialpad}
         />
