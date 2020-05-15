@@ -1,4 +1,5 @@
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'react-emotion';
 import {
@@ -45,6 +46,12 @@ class ParticipantStatus extends React.PureComponent {
       );
   }
 }
+
+ParticipantStatus.propTypes = {
+  participant: PropTypes.object,
+  listMode: PropTypes.bool,
+  showKickConfirmation: PropTypes.bool,
+};
 
 const mapStateToProps = (state, ownProps) => {
   const { participant } = ownProps;

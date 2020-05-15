@@ -11,7 +11,7 @@ import { FUNCTIONS_HOSTNAME } from "../OutboundDialingWithConferencePlugin";
 class ConferenceService {
 
   // Private functions
-  _getUserToken = () => {
+  _getUserToken() {
     const manager = Manager.getInstance();
     return manager.user.token;
   }
@@ -185,6 +185,6 @@ export function toggleHold(payload, original, hold) {
 
   console.log('Unholding participant', participantSid);
   return conferenceService.unholdParticipant(conference, participantSid);
-};
+}
 
 export default conferenceService;

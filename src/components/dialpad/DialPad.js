@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from 'prop-types';
 import { Actions, Manager, Notifications } from "@twilio/flex-ui";
 import {
   withStyles,
@@ -20,8 +21,6 @@ import { connect } from "react-redux";
 
 import { blockForOutboundCall } from "../../eventListeners/workerClient/reservationCreated";
 import { CallControls, CallStatus, RingingService, DialpadSyncDoc } from '../../utilities/DialPadUtil'
-
-
 
 const styles = theme => ({
   main: {
@@ -119,84 +118,84 @@ export class DialPad extends React.Component {
 
     this.token = Manager.getInstance().user.token;
     this.syncDocName = `${this.props.workerContactUri}.outbound-call`;
+
+    this.buttons = [
+      [
+        {
+          value: "1",
+          letters: ""
+        },
+        {
+          value: "2",
+          letters: "abc"
+        },
+        {
+          value: "3",
+          letters: "def"
+        }
+      ],
+      [
+        {
+          value: "4",
+          letters: "ghi"
+        },
+        {
+          value: "5",
+          letters: "jkl"
+        },
+        {
+          value: "6",
+          letters: "mno"
+        }
+      ],
+      [
+        {
+          value: "7",
+          letters: "pqrs"
+        },
+        {
+          value: "8",
+          letters: "tuv"
+        },
+        {
+          value: "9",
+          letters: "wxyz"
+        }
+      ],
+      [
+        {
+          value: "*",
+          letters: " "
+        },
+        {
+          value: "0",
+          letters: "+"
+        },
+        {
+          value: "#",
+          letters: " "
+        }
+      ]
+    ];
+
+    this.numpad = this.buttons.map((rowItem, rowIndex) => {
+      const { classes } = this.props;
+
+      return (
+        <div className={classes.numpadRowContainer} key={rowIndex}>
+          {rowItem.map((item, itemIndex) => {
+            return (
+              <div key={"num" + itemIndex} className={classes.numberButtonContainer}>
+                {item.value !== "0"
+                  ? this.standardNumberButton(item)
+                  : this.clickNHoldButton(item)}
+              </div>
+            );
+          })}
+        </div>
+      );
+    });
   }
-
-  buttons = [
-    [
-      {
-        value: "1",
-        letters: ""
-      },
-      {
-        value: "2",
-        letters: "abc"
-      },
-      {
-        value: "3",
-        letters: "def"
-      }
-    ],
-    [
-      {
-        value: "4",
-        letters: "ghi"
-      },
-      {
-        value: "5",
-        letters: "jkl"
-      },
-      {
-        value: "6",
-        letters: "mno"
-      }
-    ],
-    [
-      {
-        value: "7",
-        letters: "pqrs"
-      },
-      {
-        value: "8",
-        letters: "tuv"
-      },
-      {
-        value: "9",
-        letters: "wxyz"
-      }
-    ],
-    [
-      {
-        value: "*",
-        letters: " "
-      },
-      {
-        value: "0",
-        letters: "+"
-      },
-      {
-        value: "#",
-        letters: " "
-      }
-    ]
-  ];
-
-  numpad = this.buttons.map((rowItem, rowIndex) => {
-    const { classes } = this.props;
-
-    return (
-      <div className={classes.numpadRowContainer} key={rowIndex}>
-        {rowItem.map((item, itemIndex) => {
-          return (
-            <div key={"num" + itemIndex} className={classes.numberButtonContainer}>
-              {item.value !== "0"
-                ? this.standardNumberButton(item)
-                : this.clickNHoldButton(item)}
-            </div>
-          );
-        })}
-      </div>
-    );
-  });
 
   standardNumberButton(item) {
     const { classes } = this.props;
@@ -206,7 +205,7 @@ export class DialPad extends React.Component {
         aria-label={item.value}
         key={item.value}
         className={classNames(classes.numberButton)}
-        onClick={e => this.buttonPress(item.value)}
+        onClick={() => this.buttonPress(item.value)}
       >
         {item.value}
         {item.letters && (
@@ -270,7 +269,7 @@ export class DialPad extends React.Component {
                   classes.functionButton,
                   this.props.call.callStatus === "dialing" ? classes.hide : ""
                 )}
-                onClick={e => {
+                onClick={() => {
                   this.pressDial(this.props.number);
                 }}
               >
@@ -293,7 +292,7 @@ export class DialPad extends React.Component {
                   classes.functionButton,
                   this.props.call.callStatus === "queued" ? classes.hide : ""
                 )}
-                onClick={e => this.pressHangup(this.props.call.callSid)}
+                onClick={() => this.pressHangup(this.props.call.callSid)}
               >
                 <CallEnd />
               </Button>
@@ -350,7 +349,8 @@ export class DialPad extends React.Component {
           console.log("OUTBOUND DIALPAD: Agent is now on Outbound Calls");
           resolve();
         })
-        .catch(error => {
+        .catch(e => {
+          console.log("OUTBOUND DIALPAD: Error setting to offline", e);
           Actions.invokeAction("SetActivity", {
             activityName: "Offline"
           })
@@ -381,7 +381,7 @@ export class DialPad extends React.Component {
     })
 
     return response;
-  };
+  }
 
   pressDial() {
     console.log("OUTBOUND DIALPAD: Dial Button Pressed");
@@ -392,7 +392,7 @@ export class DialPad extends React.Component {
       this.noVoiceTasksOpen() &&
       this.props.number !== "" &&
       CallStatus.canDial(call) &&
-      this.props.activeCall === ""
+      !this.props.activeCall
     ) {
       this.orchestrateMakeCall()
 
@@ -469,7 +469,6 @@ export class DialPad extends React.Component {
   }
 
   eventListener = e => this.keyPressListener(e);
-
   eventkeydownListener = e => this.keydownListener(e);
 
   pasteListener = e => {
@@ -479,7 +478,7 @@ export class DialPad extends React.Component {
     for (var i = 0; i < paste.length; i++) {
       this.buttonPress(paste.charAt(i));
     }
-  };
+  }
 
   keydownListener(e) {
     if (e.keyCode === 8) {
@@ -520,13 +519,13 @@ export class DialPad extends React.Component {
   buttonPress(value) {
     const activeCall = this.props.activeCall;
 
-    if (activeCall === "") {
+    if (activeCall) {
+      activeCall.sendDigits(value);
+    } else {
       // e.164 max langh is 15 + 1 for the addition symbol
       if (this.props.number.length < 16) {
         this.props.setNumberState(this.props.number + value);
       }
-    } else {
-      activeCall.sendDigits(value);
     }
   }
 
@@ -570,6 +569,19 @@ export class DialPad extends React.Component {
   }
 }
 
+DialPad.propTypes = {
+  classes: PropTypes.object,
+  workerContactUri: PropTypes.string,
+  number: PropTypes.string,
+  call: PropTypes.object,
+  activeCall: PropTypes.object,
+  autoDial: PropTypes.bool,
+  setInitialActivity: PropTypes.func,
+  tasks: PropTypes.object,
+  setCallState: PropTypes.func,
+  setNumberState: PropTypes.func,
+};
+
 const mapStateToProps = state => {
   return {
     tasks: state.flex.worker.tasks,
@@ -577,7 +589,7 @@ const mapStateToProps = state => {
     workerContactUri: state.flex.worker.attributes.contact_uri,
     activeCall:
       typeof state.flex.phone.connection === "undefined"
-        ? ""
+        ? null  
         : state.flex.phone.connection.source,
     available: state.flex.worker.activity.available
   };

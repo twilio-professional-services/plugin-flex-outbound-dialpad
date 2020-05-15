@@ -1,7 +1,7 @@
 import { Actions, StateHelper } from "@twilio/flex-ui";
 
 export function registerAcceptTaskExtensions() {
-    Actions.replaceAction('AcceptTask', async (payload, original) => {
+    Actions.replaceAction('AcceptTask', async payload => {
     console.log("ACCEPT TASK: ", payload);
     const task = payload.task;
 

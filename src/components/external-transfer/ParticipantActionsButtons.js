@@ -1,4 +1,5 @@
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'react-emotion';
 import {
@@ -36,9 +37,13 @@ class ParticipantActionsButtons extends React.Component {
     }
   }
 
-  showKickConfirmation = () => this.props.setShowKickConfirmation(true);
+  showKickConfirmation = () => {
+    this.props.setShowKickConfirmation(true);
+  }
 
-  hideKickConfirmation = () => this.props.setShowKickConfirmation(false);
+  hideKickConfirmation = () => {
+    this.props.setShowKickConfirmation(false);
+  }
 
   onHoldParticipantClick = () => {
     const { participant, task } = this.props;
@@ -49,7 +54,7 @@ class ParticipantActionsButtons extends React.Component {
       task,
       targetSid: participantType === 'worker' ? workerSid : callSid
     });
-  };
+  }
 
   onKickParticipantConfirmClick = () => {
     const { participant, task } = this.props;
@@ -61,7 +66,7 @@ class ParticipantActionsButtons extends React.Component {
       targetSid: participantType === 'worker' ? workerSid : callSid
     });
     this.hideKickConfirmation();
-  };
+  }
 
   renderKickConfirmation() {
     return (
@@ -135,6 +140,16 @@ class ParticipantActionsButtons extends React.Component {
       );
   }
 }
+
+ParticipantActionsButtons.propTypes = {
+  participant: PropTypes.object,
+  clearParticipantComponentState: PropTypes.func,
+  setShowKickConfirmation: PropTypes.func,
+  task: PropTypes.object,
+  theme: PropTypes.object,
+  listMode: PropTypes.bool,
+  showKickConfirmation: PropTypes.bool,
+};
 
 const mapStateToProps = (state, ownProps) => {
   const { participant } = ownProps;

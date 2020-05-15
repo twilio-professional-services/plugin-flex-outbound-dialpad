@@ -92,7 +92,9 @@ class DialPadDialog extends React.Component {
           console.log("OUTBOUND DIALPAD: Agent is now Available");
           resolve();
         })
-        .catch(error => {
+        .catch(e => {
+          console.log('OUTBOUND DIALPAD: Exception setting available', e);
+
           Actions.invokeAction("SetActivity", {
             activityName: "Idle"
           })
@@ -160,20 +162,20 @@ class DialPadDialog extends React.Component {
     } else {
       Notifications.showNotification("CantCloseDialpad");
     }
-  };
+  }
 
   // used to allow state updated from child component
   setCallState(callUpdate) {
     console.log("OUTBOUND DIALPAD: Call State updated from Dialpad Popup:", callUpdate.callStatus);
 
     this.setState({ call: callUpdate });
-  };
+  }
 
   // used to allow state updated from child component
   setNumberState(numberUpdate) {
     console.log("OUTBOUND DIALPAD: Number State updated from Dialpad Popup");
     this.setState({ numberToDial: numberUpdate });
-  };
+  }
 
   render() {
     return (
@@ -224,19 +226,22 @@ const CloseButton = styled("div")`
 `;
 
 export default class DialPadLauncher extends React.Component {
-  state = {
-    isOpen: false
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      isOpen: false
+    };
+  }
 
   openDialpad = () => {
     this.setState({
       isOpen: true
     });
-  };
+  }
 
   closeDialpad = () => {
     this.setState({ isOpen: false });
-  };
+  }
 
   render() {
     return (

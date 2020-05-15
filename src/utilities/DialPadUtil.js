@@ -34,7 +34,7 @@ class CallControlsClass {
 
 		console.log("OUTBOUND DIALPAD: Making remote request to dial: ", to);
 
-		return new Promise((resolve, reject) => {
+		return new Promise((resolve) => {
 
 			fetch(makeCallURL, {
 				headers,
@@ -67,7 +67,7 @@ class CallControlsClass {
 			+ `&CallSid=${CallSid}`
 		)
 
-		return new Promise((resolve, reject) => {
+		return new Promise((resolve) => {
 
 			fetch(endCallURL, {
 				headers,
@@ -139,7 +139,6 @@ class CallStatusClass {
 }
 
 class RingingServiceClass {
-
 	constructor() {
 		//audio credit https://freesound.org/people/AnthonyRamirez/sounds/455413/
 		//creative commons license
@@ -163,7 +162,6 @@ class RingingServiceClass {
 }
 
 class DialpadSyncDocClass {
-
 	constructor() {
 		const manager = Manager.getInstance();
 		const workerContactUri = manager.workerClient.attributes.contact_uri;
@@ -171,10 +169,9 @@ class DialpadSyncDocClass {
 	}
 
 	getDialpadSyncDoc() {
-		const syncDocName = this.syncDocName;
-		return new Promise(function (resolve) {
+		return new Promise(resolve => {
 			SYNC_CLIENT
-				.document(syncDocName)
+				.document(this.syncDocName)
 				.then(doc => {
 					resolve(doc)
 				})
@@ -208,7 +205,7 @@ class DialpadSyncDocClass {
 			+ `&syncDocName=${encodeURIComponent(this.syncDocName)}`
 		)
 
-		return new Promise((resolve, reject) => {
+		return new Promise((resolve) => {
 
 			fetch(endCallURL, {
 				headers,

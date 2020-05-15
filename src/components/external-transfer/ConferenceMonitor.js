@@ -1,9 +1,14 @@
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import ConferenceService from '../../utilities/ConferenceService';
 
 class ConferenceMonitor extends React.Component {
-  state = {
-    liveParticipantCount: 0
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      liveParticipantCount: 0
+    }
   }
 
   componentDidUpdate() {
@@ -60,5 +65,9 @@ class ConferenceMonitor extends React.Component {
     return null;
   }
 }
+
+ConferenceMonitor.propTypes = {
+  task: PropTypes.object,
+};
 
 export default ConferenceMonitor;

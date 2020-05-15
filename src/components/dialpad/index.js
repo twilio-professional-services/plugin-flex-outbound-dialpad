@@ -1,8 +1,7 @@
 import React from "react";
 import DialPadLauncher from "./DialPadLauncher";
 
-export function loadDialPadInterface(flex, manager) {
-
+export function loadDialPadInterface(flex) {
 	flex.MainHeader.Content.add(
 		<DialPadLauncher
 			key="sidebardialerbutton"
@@ -12,6 +11,4 @@ export function loadDialPadInterface(flex, manager) {
 			align: "end"
 		}
 	)
-
-
 }

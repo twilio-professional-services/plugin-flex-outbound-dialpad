@@ -1,5 +1,3 @@
-PASSWORD := 
-
 all: clean setup 
 
 clean: ;
@@ -7,7 +5,7 @@ clean: ;
 	rm -rf serverless/node_modules
 
 deploy: ;
-	npm run build
+	npm run deploy
 	twilio serverless:deploy
 
 update: ;
