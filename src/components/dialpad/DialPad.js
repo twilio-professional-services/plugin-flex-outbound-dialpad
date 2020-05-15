@@ -472,12 +472,14 @@ export class DialPad extends React.Component {
   eventkeydownListener = e => this.keydownListener(e);
 
   pasteListener = e => {
+    // strip all non numeric characters from paste except +
     const paste = (e.clipboardData || window.clipboardData)
-      .getData("text")
-      .replace(/\D/g, ""); //strip all non numeric characters from paste
-    for (var i = 0; i < paste.length; i++) {
-      this.buttonPress(paste.charAt(i));
-    }
+      .getData('text')
+      .replace(/[^0-9+]+/g, '');
+
+    paste.split('').forEach(c => {
+      this.buttonPress(c);
+    });
   }
 
   keydownListener(e) {

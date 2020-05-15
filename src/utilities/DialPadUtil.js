@@ -140,11 +140,7 @@ class CallStatusClass {
 
 class RingingServiceClass {
 	constructor() {
-		//audio credit https://freesound.org/people/AnthonyRamirez/sounds/455413/
-		//creative commons license
-		this.ringSound = new Audio(
-			"https://freesound.org/data/previews/455/455413_7193358-lq.mp3"
-		);
+		this.ringSound = new Audio('https://assets.flex.twilio.com/assets/audio/uplifting-ring-3.wav');
 		this.ringSound.loop = true;
 		this.ringSound.volume = 0.5;
 		this.ringSound.pause();
