@@ -5,24 +5,21 @@ import {
 	SYNC_CLIENT
 } from "../OutboundDialingWithConferencePlugin"
 
-
-
 class CallControlsClass {
-
-	makeCall(to) {
-
+	makeCall(to, fromOverride, attributes) {
 		const manager = Manager.getInstance();
 		const workerPhoneNumber = manager.workerClient.attributes.phone;
 		const workerContactUri = manager.workerClient.attributes.contact_uri;
 		const workerSid = manager.workerClient.sid;
 		const token = manager.user.token;
 
-		const from = workerPhoneNumber ? workerPhoneNumber : DEFAULT_FROM_NUMBER;
+		const from = fromOverride || workerPhoneNumber ? workerPhoneNumber : DEFAULT_FROM_NUMBER;
 
 		const makeCallURL = `https://${FUNCTIONS_HOSTNAME}/outbound-dialing/makeCall`
 		const headers = {
 			'Content-Type': 'application/x-www-form-urlencoded'
 		}
+
 		const body = (
 			`Token=${encodeURIComponent(token)}`
 			+ `&To=${encodeURIComponent(to)}`
@@ -30,12 +27,11 @@ class CallControlsClass {
 			+ `&workerContactUri=${encodeURIComponent(workerContactUri)}`
 			+ `&functionsDomain=${encodeURIComponent(FUNCTIONS_HOSTNAME)}`
 			+ `&workerSid=${encodeURIComponent(workerSid)}`
+			+ `&attributes=${encodeURIComponent(JSON.stringify(attributes))}`
 		)
 
 		console.log("OUTBOUND DIALPAD: Making remote request to dial: ", to);
-
-		return new Promise((resolve) => {
-
+		return new Promise(resolve => {
 			fetch(makeCallURL, {
 				headers,
 				method: 'POST',

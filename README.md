@@ -63,7 +63,7 @@ Unavailable states programmed by default (One of these must be configured in Tas
 
 ## Changelog
 
-v1.3.1 - Simplified setup and installation instructions
+v1.4.0 - Simplified setup and installation instructions, click to call support via postMessage, new ringSound, minor fixes
 
 v1.3 - Moved dialpad to main header to avoid the responsive rendering of the side nav unmounting when resizing the canvas.
 

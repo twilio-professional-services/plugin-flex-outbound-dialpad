@@ -5,6 +5,7 @@ import { Manager } from "@twilio/flex-ui";
 //independent features
 import { loadDialPadInterface } from "./components/dialpad"
 import { loadExternalTransferInterface } from "./components/external-transfer"
+import { CallControls } from './utilities/DialPadUtil'
 
 // common libraries
 import { registerReservationCreatedExtensions } from "./eventListeners/workerClient/reservationCreated";
@@ -32,14 +33,10 @@ function tokenUpdateHandler() {
 
 
 export default class OutboundDialingWithConferencePlugin extends FlexPlugin {
-
-
   constructor() {
     console.log('env', process.env);
     super(PLUGIN_NAME);
-
   }
-
 
   /**
    * This code is run when your plugin is being started
@@ -49,8 +46,7 @@ export default class OutboundDialingWithConferencePlugin extends FlexPlugin {
    * @param manager { import('@twilio/flex-ui').Manager }
    */
   init(flex, manager) {
-
-    var translationStrings = {
+    const translationStrings = {
       DIALPADExternalTransferHoverOver: "Add Conference Participant",
       DIALPADExternalTransferPhoneNumberPopupHeader: "Enter phone number to add to the conference",
       DIALPADExternalTransferPhoneNumberPopupTitle: "Phone Number",
@@ -68,5 +64,16 @@ export default class OutboundDialingWithConferencePlugin extends FlexPlugin {
     loadExternalTransferInterface.bind(this)(flex, manager)
     registerReservationCreatedExtensions(manager);
     registerActionExtensions();
+
+    window.addEventListener('message', this.onMessage, false);
   }
+
+  onMessage = e => {
+    try {
+      const data = JSON.parse(e.data);
+      if (data.action && data.action == 'outbound_dial' && data.to) {
+        CallControls.makeCall(data.to, data.from, data.attributes || {});
+      }
+    } catch (e) { }
+  };
 }

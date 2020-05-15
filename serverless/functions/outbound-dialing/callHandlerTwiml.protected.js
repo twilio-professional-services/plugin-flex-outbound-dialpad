@@ -5,17 +5,23 @@ exports.handler = async function (context, event, callback) {
 	console.log("to:", event.To);
 	console.log("workflowSid:", context.TWILIO_WORKFLOW_SID);
 
-	var taskAttributes = {
+	let customAttributes = {};
+	try {
+		customAttributes = JSON.parse(event.attributes);
+	} catch (e) { }
+
+	const taskAttributes = Object.assign({
 		targetWorker: event.workerContactUri,
 		autoAnswer: "true",
 		type: "outbound",
 		direction: "outbound",
 		name: event.To
-	};
+	}, customAttributes);
 
-	let twiml = new Twilio.twiml.VoiceResponse();
+	console.log('attributes: ', taskAttributes);
 
-	var enqueue = twiml.enqueue({
+	const twiml = new Twilio.twiml.VoiceResponse();
+	const enqueue = twiml.enqueue({
 		workflowSid: `${context.TWILIO_WORKFLOW_SID}`
 	});
 
