@@ -1,4 +1,5 @@
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import {
   Actions,
   IconButton,
@@ -8,7 +9,7 @@ import {
 } from '@twilio/flex-ui';
 
 class ConferenceButton extends React.PureComponent {
-  handleClick = () => {
+  handleClick() {
     Actions.invokeAction('SetComponentState', {
       name: 'ConferenceDialog',
       state: { isOpen: true }
@@ -31,5 +32,10 @@ class ConferenceButton extends React.PureComponent {
     );
   }
 }
+
+ConferenceButton.propTypes = {
+  task: PropTypes.object,
+  theme: PropTypes.object
+};
 
 export default withTheme(ConferenceButton);

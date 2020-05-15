@@ -1,4 +1,5 @@
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'react-emotion';
 import { Manager, withTheme } from '@twilio/flex-ui';
@@ -23,9 +24,13 @@ const NameListItem = styled('div')`
 `;
 
 class ParticipantName extends React.Component {
-  state = {
-    name: ''
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      name: ''
+    };
+  }
 
   componentDidMount() {
     const { participant, task } = this.props;
@@ -74,12 +79,18 @@ class ParticipantName extends React.Component {
   }
 }
 
+ParticipantName.propTypes = {
+  participant: PropTypes.object,
+  task: PropTypes.object,
+  listMode: PropTypes.bool,
+};
+
 const mapStateToProps = state => {
   const { serviceBaseUrl } = state.flex.config;
 
   return {
     serviceBaseUrl,
-  };
+  }
 };
 
 export default connect(mapStateToProps)(withTheme(ParticipantName));

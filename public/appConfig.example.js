@@ -1,20 +1,12 @@
-// your account sid
-var accountSid = 'accountSid';
-
-// set to /plugins.json for local dev
-// set to /plugins.local.build.json for testing your build
-// set to "" for the default live plugin loader
-var pluginServiceUrl = '/plugins.json';
-
 var appConfig = {
   pluginService: {
-    enabled: true,
-    url: pluginServiceUrl,
+    // set to /plugins.json for local dev
+    // set to /plugins.local.build.json for testing your build
+    // set to "" for the default live plugin loader
+    url: '/plugins.json',
   },
   sso: {
-    accountSid: accountSid
+    accountSid: '' // Set to login via your configured SSO provider automatically
   },
-  ytica: false,
   logLevel: 'debug',
-  showSupervisorDesktopView: true,
 };

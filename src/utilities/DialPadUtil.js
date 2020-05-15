@@ -5,24 +5,21 @@ import {
 	SYNC_CLIENT
 } from "../OutboundDialingWithConferencePlugin"
 
-
-
 class CallControlsClass {
-
-	makeCall(to) {
-
+	makeCall(to, fromOverride, attributes) {
 		const manager = Manager.getInstance();
 		const workerPhoneNumber = manager.workerClient.attributes.phone;
 		const workerContactUri = manager.workerClient.attributes.contact_uri;
 		const workerSid = manager.workerClient.sid;
 		const token = manager.user.token;
 
-		const from = workerPhoneNumber ? workerPhoneNumber : DEFAULT_FROM_NUMBER;
+		const from = fromOverride || workerPhoneNumber ? workerPhoneNumber : DEFAULT_FROM_NUMBER;
 
 		const makeCallURL = `https://${FUNCTIONS_HOSTNAME}/outbound-dialing/makeCall`
 		const headers = {
 			'Content-Type': 'application/x-www-form-urlencoded'
 		}
+
 		const body = (
 			`Token=${encodeURIComponent(token)}`
 			+ `&To=${encodeURIComponent(to)}`
@@ -30,12 +27,11 @@ class CallControlsClass {
 			+ `&workerContactUri=${encodeURIComponent(workerContactUri)}`
 			+ `&functionsDomain=${encodeURIComponent(FUNCTIONS_HOSTNAME)}`
 			+ `&workerSid=${encodeURIComponent(workerSid)}`
+			+ `&attributes=${encodeURIComponent(JSON.stringify(attributes))}`
 		)
 
 		console.log("OUTBOUND DIALPAD: Making remote request to dial: ", to);
-
-		return new Promise((resolve, reject) => {
-
+		return new Promise(resolve => {
 			fetch(makeCallURL, {
 				headers,
 				method: 'POST',
@@ -67,7 +63,7 @@ class CallControlsClass {
 			+ `&CallSid=${CallSid}`
 		)
 
-		return new Promise((resolve, reject) => {
+		return new Promise((resolve) => {
 
 			fetch(endCallURL, {
 				headers,
@@ -139,13 +135,8 @@ class CallStatusClass {
 }
 
 class RingingServiceClass {
-
 	constructor() {
-		//audio credit https://freesound.org/people/AnthonyRamirez/sounds/455413/
-		//creative commons license
-		this.ringSound = new Audio(
-			"https://freesound.org/data/previews/455/455413_7193358-lq.mp3"
-		);
+		this.ringSound = new Audio('https://assets.flex.twilio.com/assets/audio/uplifting-ring-3.wav');
 		this.ringSound.loop = true;
 		this.ringSound.volume = 0.5;
 		this.ringSound.pause();
@@ -163,7 +154,6 @@ class RingingServiceClass {
 }
 
 class DialpadSyncDocClass {
-
 	constructor() {
 		const manager = Manager.getInstance();
 		const workerContactUri = manager.workerClient.attributes.contact_uri;
@@ -171,10 +161,9 @@ class DialpadSyncDocClass {
 	}
 
 	getDialpadSyncDoc() {
-		const syncDocName = this.syncDocName;
-		return new Promise(function (resolve) {
+		return new Promise(resolve => {
 			SYNC_CLIENT
-				.document(syncDocName)
+				.document(this.syncDocName)
 				.then(doc => {
 					resolve(doc)
 				})
@@ -208,7 +197,7 @@ class DialpadSyncDocClass {
 			+ `&syncDocName=${encodeURIComponent(this.syncDocName)}`
 		)
 
-		return new Promise((resolve, reject) => {
+		return new Promise((resolve) => {
 
 			fetch(endCallURL, {
 				headers,

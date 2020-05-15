@@ -85,7 +85,6 @@ class DialPadDialog extends React.Component {
 
   setAgentAvailable() {
     return new Promise((resolve, reject) => {
-
       Actions.invokeAction("SetActivity", {
         activityName: "Available"
       })
@@ -93,7 +92,9 @@ class DialPadDialog extends React.Component {
           console.log("OUTBOUND DIALPAD: Agent is now Available");
           resolve();
         })
-        .catch(error => {
+        .catch(e => {
+          console.log('OUTBOUND DIALPAD: Exception setting available', e);
+
           Actions.invokeAction("SetActivity", {
             activityName: "Idle"
           })
@@ -161,24 +162,22 @@ class DialPadDialog extends React.Component {
     } else {
       Notifications.showNotification("CantCloseDialpad");
     }
-  };
+  }
 
   // used to allow state updated from child component
   setCallState(callUpdate) {
     console.log("OUTBOUND DIALPAD: Call State updated from Dialpad Popup:", callUpdate.callStatus);
 
     this.setState({ call: callUpdate });
-  };
+  }
 
   // used to allow state updated from child component
   setNumberState(numberUpdate) {
     console.log("OUTBOUND DIALPAD: Number State updated from Dialpad Popup");
     this.setState({ numberToDial: numberUpdate });
-  };
+  }
 
   render() {
-    const { classes, onClose, ...other } = this.props;
-
     return (
       <StyledDialog
         disableBackdropClick
@@ -186,7 +185,7 @@ class DialPadDialog extends React.Component {
         onClose={this.handleClose}
         aria-labelledby="simple-dialog-title"
         maxWidth={"xs"}
-        {...other}
+        open={this.props.isOpen}
       >
         <CloseButton>
           {""}
@@ -218,8 +217,6 @@ DialPadDialog.propTypes = {
   closeDialpad: PropTypes.func.isRequired,
 };
 
-
-
 const CloseButton = styled("div")`
   cursor: pointer;
   position: absolute;
@@ -229,19 +226,22 @@ const CloseButton = styled("div")`
 `;
 
 export default class DialPadLauncher extends React.Component {
-  state = {
-    isOpen: false
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      isOpen: false
+    };
+  }
 
   openDialpad = () => {
     this.setState({
       isOpen: true
     });
-  };
+  }
 
   closeDialpad = () => {
     this.setState({ isOpen: false });
-  };
+  }
 
   render() {
     return (
@@ -255,7 +255,7 @@ export default class DialPadLauncher extends React.Component {
           Dialpad
         </IconButton>
         <DialPadDialog
-          open={this.state.isOpen}
+          isOpen={this.state.isOpen}
           openDialpad={this.openDialpad}
           closeDialpad={this.closeDialpad}
         />

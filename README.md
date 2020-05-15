@@ -35,35 +35,13 @@ Unavailable states programmed by default (One of these must be configured in Tas
 
 <img width="700px" src="screenshot/create-activity.png"/>
 
-## Twilio Serverless Dependency
-You will need the [twilio CLI](https://www.twilio.com/docs/twilio-cli/quickstart) and the [serverless plugin](https://www.twilio.com/docs/labs/serverless-toolkit/getting-started) to deploy the functions you can install with the following commands
-
-`npm install twilio-cli -g`
-
-and then
-
-`twilio plugins:install @twilio-labs/plugin-serverless`
-
-
 ## How to use
 
-1. Setup dependencies above, The workflow and the outbound calls worker activity.
+1. Clone repository
 
-2. Clone repository
+2. run `make install config`
 
-3. Copy ./public/appConfig.example.js to ./public/appConfig.js and set your account sid
-
-4.  run `npm install`
-
-5. copy ./dialpad-functions/.env.sample to ./dialpad-functions/.env and populate the appropriate SIDs.  The workflow sid should be the workflow dependency described above.
-
-6.  cd into ./dialpad-functions/ then run `npm install` and then `twilio serverless:deploy` (optionally you can run locally with `twilio serverless:start --ngrok=""`
-
-7.  Take note of the domain of where they deployed and update FUNCTIONS_HOSTNAME in ./src/OutboundDialingWithConferencePlugin.js
-
-7.  Update the DEFAULT_FROM_NUMBER in ./src/OutboundDialingWithConferencePlugin.js to a twilio number or a verified number associated with your account.
-
-8. cd back to the root folder and run `npm start` to run locally or `npm run-script build` and deploy the generated ./build/plugin-outbound-dialing-with-conference.js to [twilio assests](https://www.twilio.com/console/assets/public) to include plugin with hosted Flex
+3. run `make dev` to develop, or `make deploy` to deploy
 
 ## Important Notes
 - The plugin assumes an activity of "Outbound Calls" or "Offline" is configured for making the worker automatically unavailable, if these are not worker activity states that are available, you can either add them or update the code to change to a different state.  The same is true for ensuring an available activity of "Available" or "Idle" is in the system.
@@ -85,6 +63,8 @@ and then
 
 ## Changelog
 
+v1.4.0 - Simplified setup and installation instructions, click to call support via postMessage, new ringSound, minor fixes
+
 v1.3 - Moved dialpad to main header to avoid the responsive rendering of the side nav unmounting when resizing the canvas.
 
 v1.2 - converted plugin to use Twilio functions and sync docs to manage state.  Also merged in external transfer features.
@@ -97,4 +77,4 @@ v1.0 - initial release
 
 ## Code of Conduct
 
-Please be aware that this project has a [Code of Conduct](https://github.com/twilio-labs/.github/blob/master/CODE_OF_CONDUCT.md). The tldr; is to just be excellent to each other ❤️
+lease be aware that this project has a [Code of Conduct](https://github.com/twilio-labs/.github/blob/master/CODE_OF_CONDUCT.md). The tldr; is to just be excellent to each other ❤️

@@ -38,7 +38,7 @@ function makeOutboundCall(context, event) {
 			"https://" +
 			event.functionsDomain +
 			"/outbound-dialing/callHandlerTwiml?workerContactUri=" +
-			event.workerContactUri
+			event.workerContactUri + "&attributes=" + event.attributes
 		);
 
 		const statusCallbackURL = encodeURI(

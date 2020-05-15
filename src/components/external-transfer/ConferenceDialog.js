@@ -1,4 +1,5 @@
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Actions, withTheme, Manager } from '@twilio/flex-ui';
 import Button from '@material-ui/core/Button';
@@ -12,15 +13,19 @@ import ConferenceService from '../../utilities/ConferenceService';
 import { DEFAULT_FROM_NUMBER } from "../../OutboundDialingWithConferencePlugin"
 
 class ConferenceDialog extends React.Component {
-  state = {
-    conferenceTo: ''
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      conferenceTo: ''
+    }
   }
 
   handleClose = () => {
     this.closeDialog();
   }
 
-  closeDialog = () => {
+  closeDialog() {
     Actions.invokeAction('SetComponentState', {
       name: 'ConferenceDialog',
       state: { isOpen: false }
@@ -28,15 +33,13 @@ class ConferenceDialog extends React.Component {
   }
 
   handleKeyPress = e => {
-    const key = e.key;
-
-    if (key === 'Enter') {
+    if (e.key === 'Enter') {
       this.addConferenceParticipant();
       this.closeDialog();
     }
   }
 
-  handleChange = e => {
+  handleChange = (e) => {
     const value = e.target.value;
     this.setState({ conferenceTo: value });
   }
@@ -111,10 +114,16 @@ class ConferenceDialog extends React.Component {
   }
 }
 
+ConferenceDialog.propTypes = {
+  task: PropTypes.object,
+  phoneNumber: PropTypes.string,
+  isOpen: PropTypes.bool,
+};
+
 const mapStateToProps = state => {
   const componentViewStates = state.flex.view.componentViewStates;
   const conferenceDialogState = componentViewStates && componentViewStates.ConferenceDialog;
-  const isOpen = conferenceDialogState && conferenceDialogState.isOpen;
+  const isOpen = (conferenceDialogState && conferenceDialogState.isOpen) || false;
   return {
     isOpen,
     phoneNumber: state.flex.worker.attributes.phone

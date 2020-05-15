@@ -64,6 +64,7 @@ typings/
 # Flex related ignore
 appConfig.js
 build/
+public/pluginsService.js
 
 # serverless cli functions
 .twilio-functions

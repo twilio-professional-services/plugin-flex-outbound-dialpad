@@ -1,5 +1,11 @@
 [
   {
+    "phase": 0,
+    "name": "Admin Plugin",
+    "version": "1.66.0",
+    "src": "https://assets.flex.twilio.com/twilio/flex-admin-plugin/1.66.0/flex-admin-plugin.js"
+  },
+  {
     "name": "OutboundDialingWithConferencePlugin",
     "version": "1.3.0",
     "class": "OutboundDialingWithConferencePlugin",
@@ -8,6 +14,6 @@
         "@twilio/flex-ui": "^1"
       }
     ],
-    "src": "http://localhost:8080/plugin-outbound-dialing-with-conference.js"
+    "src": "http://localhost:3001/plugin-outbound-dialing-with-conference.js"
   }
 ]
