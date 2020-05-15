@@ -7,13 +7,13 @@
     "start": "twilio-run --env"
   },
   "devDependencies": {
-    "twilio-run": "^2.0.0"
+    "twilio-run": "^2.5.0"
   },
   "engines": {
-    "node": "8.10.0"
+    "node": "10.20.0"
   },
   "dependencies": {
     "node-fetch": "^2.6.0",
-    "twilio-flex-token-validator": "^1.5.1"
+    "twilio-flex-token-validator": "^1.5.2"
   }
 }

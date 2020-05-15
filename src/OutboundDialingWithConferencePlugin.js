@@ -14,8 +14,8 @@ import "./notifications/CustomNotifications";
 
 const PLUGIN_NAME = "OutboundDialingWithConferencePlugin";
 
-export const FUNCTIONS_HOSTNAME = '';
-export const DEFAULT_FROM_NUMBER = ""; // twilio account or verified number
+export const FUNCTIONS_HOSTNAME = process.env.REACT_APP_SERVERLESS_HOST;
+export const DEFAULT_FROM_NUMBER = process.env.REACT_APP_FROM_NUMBER;
 export const SYNC_CLIENT = new SyncClient(Manager.getInstance().user.token);
 
 function tokenUpdateHandler() {
@@ -35,6 +35,7 @@ export default class OutboundDialingWithConferencePlugin extends FlexPlugin {
 
 
   constructor() {
+    console.log('env', process.env);
     super(PLUGIN_NAME);
 
   }
