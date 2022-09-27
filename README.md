@@ -2,6 +2,10 @@
 
 This plugin is intended to demonstrate how to make outbound calls from [Twilio Flex](https://www.twilio.com/flex) that use the native call orchestration so the inbound call features such as supervisor monitoring as well as cold and warm transfer, also work for outbound calls.  This plugin also provides the ability to perform external conferencing which leverages the work on [this project](https://github.com/trogers-twilio/plugin-external-conference-warm-transfer)
 
+# NOTICE
+
+This plugin is no longer maintained as of September 27, 2022. Outbound Dialing has been an OOTB feature with Flex for some time now and anyone looking to perform this action but is still using an older version of Flex should look to update to a neer version where it us available.
+
 ### how it works
 This plugin uses a series of twilio functions to create an outbound call, listen for updates to that call and push the updates to the flex users via a sync document.  When the call is answered, the worker goes available in Flex to recieve the call via a task router task.  The front end puts the agent in a busy state while waiting for the task to arrive so that no other tasks are recieved.  To avoid a race condition, when the agent does go available, any tasks that are not the outbound call are auto rejected.  The worker goes into a busy state to avoid excessive reservation rejections.
 
