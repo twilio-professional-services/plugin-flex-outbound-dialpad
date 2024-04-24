@@ -4,10 +4,10 @@ This plugin is intended to demonstrate how to make outbound calls from [Twilio F
 
 # NOTICE
 
-This plugin is no longer maintained as of September 27, 2022. Outbound Dialing has been an OOTB feature with Flex for some time now and anyone looking to perform this action but is still using an older version of Flex should look to update to a neer version where it us available.
+This plugin is no longer maintained as of September 27, 2022. Outbound Dialing has been an OOTB feature with Flex for some time now and anyone looking to perform this action but is still using an older version of Flex should look to update to a newer version where it us available.
 
 ### how it works
-This plugin uses a series of twilio functions to create an outbound call, listen for updates to that call and push the updates to the flex users via a sync document.  When the call is answered, the worker goes available in Flex to recieve the call via a task router task.  The front end puts the agent in a busy state while waiting for the task to arrive so that no other tasks are recieved.  To avoid a race condition, when the agent does go available, any tasks that are not the outbound call are auto rejected.  The worker goes into a busy state to avoid excessive reservation rejections.
+This plugin uses a series of twilio functions to create an outbound call, listen for updates to that call and push the updates to the flex users via a sync document.  When the call is answered, the worker goes available in Flex to receive the call via a task router task.  The front end puts the agent in a busy state while waiting for the task to arrive so that no other tasks are received.  To avoid a race condition, when the agent does go available, any tasks that are not the outbound call are auto rejected.  The worker goes into a busy state to avoid excessive reservation rejections.
 
 ### Dialpad
 
@@ -24,7 +24,7 @@ Before using this plugin you must first create a dedicated TaskRouter workflow f
 - make sure the filter matches to a queue with Everyone on it. The default Everyone queue will work but if you want to seperate real time reporting for outbound calls, you should make a dedicated queue for it with a queue expression
   - 1==1
 
-![alt text](https://raw.githubusercontent.com/jhunter-twilio/outbound-dialing-backend/master/screenshots/workflow-config.png)
+<img width="700px" src="screenshot/workflow-config.png"/>
 
 ### Activities
 This plugin forces the agent into an offline state to block calls while dialing out and an online state to accept the outbound call thats been placed.  You must ensure these are agent activity states are available for this plugin to work.  For both offline and available, two possible activities have been programmed, the plugin will try one of the activities and if its not available, try the other, if thats not available it will fail.  You can either provision one of the states or update the code to switch to an equivalent activity that you do have configured in Task Router.
@@ -72,13 +72,13 @@ and then
 ## Important Notes
 - The plugin assumes an activity of "Outbound Calls" or "Offline" is configured for making the worker automatically unavailable, if these are not worker activity states that are available, you can either add them or update the code to change to a different state.  The same is true for ensuring an available activity of "Available" or "Idle" is in the system.
 
-- This plugin is not compatible with the dialpad plugin that is listed as an "Experimental feature" - the expiremental feature or more recently, the "Pre Release" feature must be turned off.
+- This plugin is not compatible with the dialpad plugin that is listed as an "Experimental feature" - the experimental feature or more recently, the "Pre Release" feature must be turned off.
 
 - If you place a "phone" attribute on the worker and assign it a twilio or verified number, the call will be placed from that number instead of the default number.
 
 - This solution doesnt support and is not suitable for direct agent to agent dialing.
 
-- Since the call is routed to the agent only after the call is answered, there can be a perceived delay, typically less than a second, of the agent and the customer connecting on the conference. It is adviced to configure the hold music for the outbound call to be silence, this creates a smoother experience for the person being dialed.
+- Since the call is routed to the agent only after the call is answered, there can be a perceived delay, typically less than a second, of the agent and the customer connecting on the conference. It is advised to configure the hold music for the outbound call to be silence, this creates a smoother experience for the person being dialed.
 
 ## TODOs
 
